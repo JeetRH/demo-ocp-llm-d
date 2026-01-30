@@ -18,7 +18,7 @@ REGISTRY=registry:5000
 # REGISTRY=quay.io
 
 oc-mirror \
-  -c scratch/isc-rhoai.yaml \
+  -c scratch/isc-np.yaml \
   --workspace file:///${PWD}/scratch/oc-mirror \
   docker://"${REGISTRY}" \
   --v2 \
