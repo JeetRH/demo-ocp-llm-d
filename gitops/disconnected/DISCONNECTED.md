@@ -9,10 +9,21 @@ cp gitops/disconnected/isc*.yaml scratch/
 # edit scratch/isc.yaml
 ```
 
+# IMP
+
+# To get pull-secret.txt use link https://docs.redhat.com/en/documentation/openshift_container_platform/4.20/html/disconnected_environments/installing-mirroring-disconnected
+
+# To get package channels: 
+# RHOAI: oc get packagemanifest rhods-operator -n openshift-marketplace -o jsonpath='{.status.channels[*].name}'
+# NFD: oc get packagemanifest nfd -n openshift-marketplace -o jsonpath='{.status.channels[*].name}'
+# Nvidia GPU: oc get packagemanifest gpu-operator-certified -n openshift-marketplace -o jsonpath='{.status.channels[*].name}'
+# RH Connectivity: oc get packagemanifest rhcl-operator -n openshift-marketplace -o jsonpath='{.status.channels[*].name}'
+
+
 Create `mapping.txt`
 
 ```sh
-REGISTRY=registry:5000
+REGISTRY=registry.redhat.io
 
 # NOTE: replace with 'quay.io' if oc mirror loses its mind
 # REGISTRY=quay.io

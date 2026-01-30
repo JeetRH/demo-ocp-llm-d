@@ -10,23 +10,27 @@ mirror:
   - catalog: registry.redhat.io/redhat/redhat-operator-index:v4.20
     packages:
     - name: rhods-operator
+      defaultChannel: fast-3.x
       channels:
-      - name: fast
+      - name: fast-3.x
         minVersion: 3.2.0
         maxVersion: 3.2.0
     - name: servicemeshoperator3
-      defaultChannel: stable
+      defaultChannel: stable-3.2
       channels:
-      - name: stable
+      - name: stable-3.2
         minVersion: 3.2.0
         maxVersion: 3.2.0
     - name: nfd # Node Feature Discovery Operator
+      defaultChannel: stable
       channels:
       - name: stable
     - name: gpu-operator-certified # NVIDIA GPU Operator
+      defaultChannel: stable
       channels:
-      - name: v25.10
+      - name: stable
     - name: connectivity-link-operator # RH Connectivity Link Operator
+      defaultChannel: stable
       channels:
       - name: stable
   additionalImages:   
