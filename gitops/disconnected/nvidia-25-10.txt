@@ -1,0 +1,28 @@
+additionalImages:
+    # --- 1. The Core Operator (You already have this via the Operator Bundle, but good to double check)
+    - name: nvcr.io/nvidia/gpu-operator:v25.10.1
+
+    # --- 2. The Critical "Operands" (Runtime Components) ---
+    # These are mandatory for almost every install.
+    - name: nvcr.io/nvidia/driver:550.90.07-rhel9 # Standard Datacenter Driver (Update version if your kernel requires specific branch)
+    - name: nvcr.io/nvidia/k8s-device-plugin:v0.17.0-ubi8
+    - name: nvcr.io/nvidia/container-toolkit:v1.17.0-ubi8
+    - name: nvcr.io/nvidia/dcgm-exporter:3.3.8-3.6.0-ubi9
+    - name: nvcr.io/nvidia/gpu-feature-discovery:v0.17.0-ubi8
+    
+    # --- 3. Validation & Management ---
+    - name: nvcr.io/nvidia/cloud-native/gpu-operator-validator:v25.10.1
+    - name: nvcr.io/nvidia/cloud-native/k8s-driver-manager:v0.7.0
+    - name: nvcr.io/nvidia/cloud-native/k8s-mig-manager:v0.9.0-ubi8
+    
+    # --- 4. Advanced / Optional Features (Include if unsure) ---
+    # Used for Confidential Computing, Kata Containers, or GPUDirect
+    - name: nvcr.io/nvidia/cloud-native/k8s-cc-manager:v0.1.2
+    - name: nvcr.io/nvidia/cloud-native/k8s-kata-manager:v0.2.0
+    - name: nvcr.io/nvidia/cloud-native/nvidia-fs:2.17.5 # For GPUDirect Storage (GDS)
+    - name: nvcr.io/nvidia/cloud-native/gdrdrv:v0.4.1   # For GPUDirect RDMA
+    
+    # --- 5. Virtualization (vGPU / KubeVirt) ---
+    # Only strictly needed if using vGPU or Virtual Machines with GPU
+    - name: nvcr.io/nvidia/cloud-native/vgpu-device-manager:v0.2.5
+    - name: nvcr.io/nvidia/cloud-native/kubevirt-gpu-device-plugin:v0.4.1

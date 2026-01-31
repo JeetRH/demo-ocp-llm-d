@@ -1,3 +1,9 @@
+# To copy a oc-mirror file from local to a bastion host
+rsync -Pav ./oc-mirror.rhel9.tar.gz lab-user@bastion.sxxpx.sandbox7856.opentlc.com:~/
+
+# To copy the mapping.txt file from bastion host to local
+
+
 # Notes for a Disconnected install
 
 Create `isc.yaml` - edit the copy for your needs
@@ -15,9 +21,11 @@ cp gitops/disconnected/isc*.yaml scratch/
 
 # To get package channels: 
 # RHOAI: oc get packagemanifest rhods-operator -n openshift-marketplace -o jsonpath='{.status.channels[*].name}'
+# ServiceMesh: oc get packagemanifest servicemeshoperator3 -n openshift-marketplace -o jsonpath='{.status.channels[*].name}'
 # NFD: oc get packagemanifest nfd -n openshift-marketplace -o jsonpath='{.status.channels[*].name}'
 # Nvidia GPU: oc get packagemanifest gpu-operator-certified -n openshift-marketplace -o jsonpath='{.status.channels[*].name}'
 # RH Connectivity: oc get packagemanifest rhcl-operator -n openshift-marketplace -o jsonpath='{.status.channels[*].name}'
+# RH Build of Kueue: oc get packagemanifest kueue-operator -n openshift-marketplace -o jsonpath='{.status.channels[*].name}'
 
 
 Create `mapping.txt`
@@ -35,6 +43,21 @@ oc-mirror \
   --v2 \
   --dry-run \
   --authfile scratch/pull-secret.txt
+```
+
+
+```sh
+REGISTRY=registry.redhat.io
+
+# NOTE: replace with 'quay.io' if oc mirror loses its mind
+# REGISTRY=quay.io
+
+oc-mirror \
+  -c scratch/isc-np.yaml \
+  --workspace file:///${PWD}/scratch/oc-mirror \
+  --v2 \
+  --dry-run \
+  --manifests-only
 ```
 
 Create `images.txt` - a list of images to copy

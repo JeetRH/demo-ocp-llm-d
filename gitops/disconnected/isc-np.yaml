@@ -16,16 +16,12 @@ mirror:
         minVersion: 3.2.0
         maxVersion: 3.2.0
     - name: servicemeshoperator3
-      defaultChannel: stable-3.2
-      channels:
-      - name: stable-3.2
-        minVersion: 3.2.0
-        maxVersion: 3.2.0
-    - name: nfd # Node Feature Discovery Operator
       defaultChannel: stable
       channels:
       - name: stable
-    - name: gpu-operator-certified # NVIDIA GPU Operator
+        minVersion: 3.1.0
+        maxVersion: 3.2.1
+    - name: nfd # Node Feature Discovery Operator
       defaultChannel: stable
       channels:
       - name: stable
@@ -33,6 +29,20 @@ mirror:
       defaultChannel: stable
       channels:
       - name: stable
+    - name: kueue-operator # RH Build of Kueue
+      defaultChannel: stable-v1.2
+      channels:
+      - name: stable-v1.2
+    - name: metallb-operator
+      defaultChannel: stable
+      channels:
+      - name: stable
+  - catalog: registry.redhat.io/redhat/certified-operator-index:v4.20
+    packages:
+    - name: gpu-operator-certified # NVIDIA GPU Operator
+      defaultChannel: v25.3
+      channels:
+      - name: v25.3
   additionalImages:   
     - name: quay.io/modh/fms-hf-tuning@sha256:1ad46fe1a23f41f190c49ec2549c64f484c88fe220888a7a5700dd857ca243cc
     - name: quay.io/modh/ray@sha256:595b3acd10244e33fca1ed5469dccb08df66f470df55ae196f80e56edf35ad5a
