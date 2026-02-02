@@ -25,7 +25,7 @@ mirror:
       defaultChannel: stable
       channels:
       - name: stable
-    - name: connectivity-link-operator # RH Connectivity Link Operator
+    - name: rhcl-operator # RH Connectivity Link Operator
       defaultChannel: stable
       channels:
       - name: stable
