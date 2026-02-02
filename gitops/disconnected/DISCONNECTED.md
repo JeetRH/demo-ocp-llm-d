@@ -45,21 +45,6 @@ oc-mirror \
   --authfile scratch/pull-secret.txt
 ```
 
-
-```sh
-REGISTRY=registry.redhat.io
-
-# NOTE: replace with 'quay.io' if oc mirror loses its mind
-# REGISTRY=quay.io
-
-oc-mirror \
-  -c scratch/isc-np.yaml \
-  --workspace file:///${PWD}/scratch/oc-mirror \
-  --v2 \
-  --dry-run \
-  --manifests-only
-```
-
 Create `images.txt` - a list of images to copy
 
 ```sh
