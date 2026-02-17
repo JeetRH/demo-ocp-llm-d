@@ -2,7 +2,7 @@ To copy a oc-mirror file from local to a bastion host
 - rsync -Pav ./oc-mirror.rhel9.tar.gz lab-user@bastion.sxxpx.sandbox7856.opentlc.com:~/
 
 We need a pull secret in order to retrieve the images from registry.redhat.io. To get pull-secret.txt use the link 
-- https://docs.redhat.com/en/documentation/openshift_container_platform/4.20/html/disconnected_environments/installing-mirroring-disconnected
+- https://docs.redhat.com/en/documentation/openshift_container_platform/4.20/html/disconnected_environments/installing-mirroring-disconnected#installation-adding-registry-pull-secret_installing-mirroring-disconnected
 
 To get package channels: 
 - RHOAI: oc get packagemanifest rhods-operator -n openshift-marketplace -o jsonpath='{.status.channels[*].name}'
