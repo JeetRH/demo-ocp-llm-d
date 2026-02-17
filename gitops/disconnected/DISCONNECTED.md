@@ -1,15 +1,6 @@
 To copy a oc-mirror file from local to a bastion host
 - rsync -Pav ./oc-mirror.rhel9.tar.gz lab-user@bastion.sxxpx.sandbox7856.opentlc.com:~/
 
-** Notes for a Disconnected install
-
-Create `isc.yaml` - edit the copy for your needs and copy it in the scratch folder
-
-```sh
-[ -d scratch ] || mkdir scratch
-cp gitops/disconnected/isc*.yaml scratch/
-```
-
 We need a pull secret in order to retrieve the images from registry.redhat.io. To get pull-secret.txt use the link 
 - https://docs.redhat.com/en/documentation/openshift_container_platform/4.20/html/disconnected_environments/installing-mirroring-disconnected
 
@@ -23,6 +14,13 @@ To get package channels:
 
 
 To run oc-mirror and get the list of images use the following instructions:
+
+Create `isc.yaml` - edit the copy for your needs and copy it in the scratch folder
+
+```sh
+[ -d scratch ] || mkdir scratch
+cp gitops/disconnected/isc*.yaml scratch/
+```
 
 ```sh
 REGISTRY=registry.redhat.io
