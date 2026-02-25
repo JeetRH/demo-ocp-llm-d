@@ -1,0 +1,64 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: guidellm-llama-benchmark-job
+  namespace: demo-guidellm
+spec:
+  backoffLimit: 2
+  completions: 1
+  parallelism: 1
+  template:
+    metadata:
+      labels:
+        app: guidellm-llama-benchmark
+    spec:
+      restartPolicy: Never
+      volumes:
+        - name: models-volume
+          emptyDir: {}
+        - name: results-volume
+          persistentVolumeClaim:
+            claimName: guidellm-data
+      initContainers:
+        - name: redhataillama-31-8b-instruct-tokenizer
+          image: registry.redhat.io/rhelai1/modelcar-llama-3-1-8b-instruct-fp8-dynamic:1.5
+          command: ["/bin/sh", "-c"]
+          args:
+            - cp /models/tokenizer*.json /shared-models/
+          volumeMounts:
+            - name: models-volume
+              mountPath: /shared-models
+      containers:
+        - name: guidellm
+          image: ghcr.io/vllm-project/guidellm:v0.5.3
+          imagePullPolicy: IfNotPresent
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              set -eu
+              TS="$(date -u +%Y%m%dT%H%M%SZ)"
+              OUT="/results/guidellm-llama-benchmark-${TS}.json"
+
+              echo "Tokenizer files available in /config:"
+              ls -la /config
+              echo "Writing benchmark results to ${OUT}"
+
+              guidellm benchmark run \
+                --target "${GUIDELLM_TARGET}" \
+                --model redhataillama-31-8b-instruct \
+                --processor /config \
+                --data "prompt_tokens=200,output_tokens=100" \
+                --rate-type concurrent \
+                --rate 1,5 \
+                --max-seconds 30 \
+                --output-path "${OUT}"
+
+              echo "Benchmark complete."
+          env:
+            - name: GUIDELLM_TARGET
+              value: "https://redhataillama-31-8b-instruct-guidellm.apps.cluster-s8mpx.s8mpx.sandbox5256.opentlc.com/v1"
+          volumeMounts:
+            - name: models-volume
+              mountPath: /config
+            - name: results-volume
+              mountPath: /results
