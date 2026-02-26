@@ -6,5 +6,7 @@ namespace: demo-guidellm
 resources:
   - namespace.yaml
   - pvc.yaml
-  - gm-job.yaml
+  - pvc-reader.yaml
+  # - gm-job.yaml
   # - gm-llama-job.yaml
+  - gm-llama-job-pvc.yaml

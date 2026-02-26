@@ -1,0 +1,73 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: guidellm-llama-benchmark-job-pvc
+  namespace: demo-guidellm
+spec:
+  backoffLimit: 2
+  completions: 1
+  parallelism: 1
+  template:
+    metadata:
+      labels:
+        app: guidellm-llama-benchmark-pvc
+    spec:
+      restartPolicy: Never
+      volumes:
+        - name: models-volume
+          emptyDir: {}
+        - name: results-volume
+          persistentVolumeClaim:
+            claimName: guidellm-data
+      containers:
+        - name: guidellm
+          image: ghcr.io/vllm-project/guidellm:v0.5.3
+          imagePullPolicy: IfNotPresent
+          command: ["/bin/sh", "-c"]
+          args:
+            - |
+              set -eu
+              TS="$(date -u +%Y%m%dT%H%M%SZ)"
+              OUT="/results/guidellm-llama-benchmark-${TS}.json"
+              MAX_WAIT_SECS=900
+              WAITED_SECS=0
+
+              echo "Waiting for tokenizer files in PVC path /pvc..."
+              until [ -f /pvc/tokenizer.json ] && [ -f /pvc/tokenizer_config.json ]; do
+                if [ "${WAITED_SECS}" -ge "${MAX_WAIT_SECS}" ]; then
+                  echo "Timed out after ${MAX_WAIT_SECS}s waiting for /pvc/tokenizer.json and /pvc/tokenizer_config.json"
+                  exit 1
+                fi
+                echo "required tokenizer files not found yet; sleeping 5s"
+                sleep 5
+                WAITED_SECS=$((WAITED_SECS + 5))
+              done
+
+              cp /pvc/tokenizer.json /config/
+              cp /pvc/tokenizer_config.json /config/
+
+              echo "Tokenizer files available in /config:"
+              ls -la /config
+              echo "Writing benchmark results to ${OUT}"
+
+              guidellm benchmark run \
+                --target "${GUIDELLM_TARGET}" \
+                --model redhataillama-31-8b-instruct \
+                --processor /config \
+                --data "prompt_tokens=200,output_tokens=100" \
+                --rate-type concurrent \
+                --rate 1,5 \
+                --max-seconds 30 \
+                --output-path "${OUT}"
+
+              echo "Benchmark complete."
+          env:
+            - name: GUIDELLM_TARGET
+              value: "https://redhataillama-31-8b-instruct-guidellm.apps.cluster-s8mpx.s8mpx.sandbox5256.opentlc.com/v1"
+          volumeMounts:
+            - name: models-volume
+              mountPath: /config
+            - name: results-volume
+              mountPath: /results
+            - name: results-volume
+              mountPath: /pvc

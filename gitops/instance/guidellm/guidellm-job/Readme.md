@@ -14,6 +14,26 @@ After that execute the following command to get the json file your local machine
 
 ```
 oc -n demo-guidellm exec pvc-reader -- \
-  cat /results/guidellm-llama-benchmark-20260225T191656Z.json \
-  > ./guidellm-llama-benchmark-20260225T191656Z.json
+  cat /results/guidellm-llama-benchmark-20260226T212734Z.json \
+  > ./guidellm-llama-benchmark-20260226T212734Z.json
+
+oc -n demo-guidellm exec pvc-reader -- \
+  cat /results/tokenizers/tokenizer.json > ./tokenizer.json
+
+oc -n demo-guidellm exec pvc-reader -- \
+  cat /results/tokenizers/tokenizer_config.json > ./tokenizer_config.json
+```
+
+
+To write tokenizer files to the pod:
+
+```
+# Get the waiting job pod name
+POD=$(oc -n demo-guidellm get pods -l job-name=guidellm-llama-benchmark-job-pvc -o jsonpath='{.items[0].metadata.name}')
+echo "$POD"
+
+Upload local tokenizer files directly into PVC root via waiting pod
+oc -n demo-guidellm exec -i "$POD" -- /bin/sh -c 'cat > /pvc/tokenizer.json' < tokenizer.json
+oc -n demo-guidellm exec -i "$POD" -- /bin/sh -c 'cat > /pvc/tokenizer_config.json' < tokenizer_config.json
+
 ```
