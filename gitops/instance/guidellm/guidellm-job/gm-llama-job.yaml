@@ -24,10 +24,16 @@ spec:
           image: registry.redhat.io/rhelai1/modelcar-llama-3-1-8b-instruct-fp8-dynamic:1.5
           command: ["/bin/sh", "-c"]
           args:
-            - cp /models/tokenizer*.json /shared-models/
+            - |
+              set -eu
+              mkdir -p /shared-results/tokenizers
+              cp /models/tokenizer*.json /shared-models/
+              cp /models/tokenizer*.json /shared-results/tokenizers/
           volumeMounts:
             - name: models-volume
               mountPath: /shared-models
+            - name: results-volume
+              mountPath: /shared-results
       containers:
         - name: guidellm
           image: ghcr.io/vllm-project/guidellm:v0.5.3

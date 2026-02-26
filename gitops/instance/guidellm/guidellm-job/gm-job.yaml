@@ -24,10 +24,16 @@ spec:
           image: quay.io/redhat-ai-services/modelcar-catalog:gpt-oss-20b
           command: ["/bin/sh", "-c"]
           args:
-            - cp /models/tokenizer*.json /shared-models/
+            - |
+              set -eu
+              mkdir -p /shared-results/tokenizers
+              cp /models/tokenizer*.json /shared-models/
+              cp /models/tokenizer*.json /shared-results/tokenizers/
           volumeMounts:
             - name: models-volume
               mountPath: /shared-models
+            - name: results-volume
+              mountPath: /shared-results
       containers:
         - name: guidellm
           image: ghcr.io/vllm-project/guidellm:v0.5.3
