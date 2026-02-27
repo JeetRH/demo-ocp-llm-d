@@ -56,14 +56,16 @@ spec:
                 --processor /config \
                 --data "prompt_tokens=5000,output_tokens=1000" \
                 --rate-type concurrent \
-                --rate 1 \
+                --rate 1,5 \
                 --max-seconds 30 \
                 --output-path "${OUT}"
 
               echo "Benchmark complete."
+              echo "Sleep for copying result file from the pvc"
+              sleep 1000
           env:
             - name: GUIDELLM_TARGET
-              value: "https://redhataillama-31-8b-instruct-guidellm.apps.cluster-s8mpx.s8mpx.sandbox5256.opentlc.com/v1"
+              value: "<model_route_url>/v1"
           volumeMounts:
             - name: models-volume
               mountPath: /config

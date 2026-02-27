@@ -1,39 +1,57 @@
 ---
-Edit the gm-job.yaml file with the correct route to the model and the correct image to pull the tokenizers
+Edit the gm-gptoss-pvc-job.yaml file with the correct route to the model
 
 Then run the following command:
 ```
 oc apply -k gitops/instance/guidellm/guidellm-job
 ```
-
+For Windows cmd:
+```
+oc apply -k demo-ocp-llm-d\gitops\instance\guidellm\guidellm-job
+```
 
 ---
-After the job completes, create a temporary pvc-reader pod. Use **pvc-reader.yaml**
-
-After that execute the following command to get the json file your local machine (Replace file names):
-
+The job starts running and waits for the tokenizer files to be uploaded to the pod. Use the following commands
 ```
-oc -n demo-guidellm exec pvc-reader -- \
-  cat /results/guidellm-llama-benchmark-20260226T212734Z.json \
-  > ./guidellm-llama-benchmark-20260226T212734Z.json
-
-oc -n demo-guidellm exec pvc-reader -- \
-  cat /results/tokenizers/tokenizer.json > ./tokenizer.json
-
-oc -n demo-guidellm exec pvc-reader -- \
-  cat /results/tokenizers/tokenizer_config.json > ./tokenizer_config.json
-```
-
-
-To write tokenizer files to the pod:
-
-```
-# Get the waiting job pod name
-POD=$(oc -n demo-guidellm get pods -l job-name=guidellm-llama-benchmark-job-pvc -o jsonpath='{.items[0].metadata.name}')
-echo "$POD"
-
-Upload local tokenizer files directly into PVC root via waiting pod
 oc -n demo-guidellm exec -i "$POD" -- /bin/sh -c 'cat > /pvc/tokenizer.json' < tokenizer.json
+```
+```
 oc -n demo-guidellm exec -i "$POD" -- /bin/sh -c 'cat > /pvc/tokenizer_config.json' < tokenizer_config.json
+```
 
+For Windows cmd:
+
+```
+type tokenizer.json | oc -n demo-guidellm exec -i "$POD"  -- sh -c "cat > /pvc/tokenizer.json
+```
+```
+type tokenizer_config.json | oc -n demo-guidellm exec -i "$POD"  -- sh -c "cat > /pvc/tokenizer_config.json
+```
+
+After the guidellm tests are complete, the pod will wait for 15 mins so that we can copy the results file (Replace file name)
+
+```
+oc -n demo-guidellm exec "$POD" -- cat /results/guidellm-gptoss-benchmark.json > ./guidellm-gptoss-benchmark.json
+
+```
+
+---
+Extra:
+
+Copy tokenizer and results from pod to local:
+
+```
+oc -n demo-guidellm exec "$POD" -- ls -l /results/tokenizers
+```
+ 
+```
+oc -n demo-guidellm exec "$POD" -- cat /results/tokenizers/tokenizer.json > tokenizer.json
+```
+ 
+```
+oc -n demo-guidellm exec "$POD" -- cat /results/tokenizers/tokenizer_config.json > tokenizer_config.json
+```
+ 
+```
+oc -n demo-guidellm "$POD" -- cat /results/guidellm-benchmark-20260227T174824Z.json > guidellm-benchmark-20260227T174824Z.json
 ```
