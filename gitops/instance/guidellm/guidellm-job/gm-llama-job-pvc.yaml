@@ -58,9 +58,12 @@ spec:
                 --rate-type concurrent \
                 --rate 1,5 \
                 --max-seconds 30 \
+                --random-seed 1234 \
                 --output-path "${OUT}"
 
               echo "Benchmark complete."
+              echo "Sleep for copying result file from the pvc"
+              sleep 1000
           env:
             - name: GUIDELLM_TARGET
               value: "<model_route_url>/v1"
