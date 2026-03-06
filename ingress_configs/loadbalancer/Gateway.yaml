@@ -5,11 +5,6 @@ metadata:
   namespace: openshift-ingress
 spec:
   gatewayClassName: openshift-default
-  infrastructure:
-    parametersRef:
-      group: ""
-      kind: ConfigMap
-      name: openshift-ai-inference-config
   listeners:
     - name: http
       port: 80
