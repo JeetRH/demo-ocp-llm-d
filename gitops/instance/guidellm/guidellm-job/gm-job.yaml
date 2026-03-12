@@ -53,7 +53,7 @@ spec:
                 --target "${GUIDELLM_TARGET}" \
                 --model gpt-oss-20b \
                 --processor /config \
-                --data "prompt_tokens=5000,output_tokens=1000" \
+                --data "prompt_tokens=75,prompt_tokens_min=50,prompt_tokens_max=100,output_tokens=100" \
                 --rate-type concurrent \
                 --rate 1 \
                 --max-seconds 30 \
@@ -64,7 +64,7 @@ spec:
               sleep 1000
           env:
             - name: GUIDELLM_TARGET
-              value: "<model_route_url>/v1"
+              value: "<model_url>/v1"
           volumeMounts:
             - name: models-volume
               mountPath: /config

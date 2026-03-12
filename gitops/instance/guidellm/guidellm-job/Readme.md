@@ -35,8 +35,9 @@ oc -n demo-guidellm exec "$POD" -- cat /results/guidellm-gptoss-benchmark.json >
 
 ```
 
+
 ---
-Extra:
+Extras:
 
 Copy tokenizer and results from pod to local:
 
@@ -50,8 +51,4 @@ oc -n demo-guidellm exec "$POD" -- cat /results/tokenizers/tokenizer.json > toke
  
 ```
 oc -n demo-guidellm exec "$POD" -- cat /results/tokenizers/tokenizer_config.json > tokenizer_config.json
-```
- 
-```
-oc -n demo-guidellm "$POD" -- cat /results/guidellm-benchmark-20260227T174824Z.json > guidellm-benchmark-20260227T174824Z.json
 ```
