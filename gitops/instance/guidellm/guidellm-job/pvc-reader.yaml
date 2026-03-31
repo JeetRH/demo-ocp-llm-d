@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Pod
 metadata:
   name: pvc-reader
-  namespace: demo-guidellm
+  namespace: mlops-guidellm
 spec:
   restartPolicy: Never
   containers:

@@ -2,7 +2,7 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: guidellm-llama-benchmark-job
-  namespace: demo-guidellm
+  namespace: mlops-guidellm
 spec:
   backoffLimit: 2
   completions: 1
